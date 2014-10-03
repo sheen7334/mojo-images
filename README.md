@@ -1,6 +1,6 @@
 # NAME
 
-Mojolicious::Plugin::Images - brand new module Mojolicious::Plugin::Images
+Mojolicious::Plugin::Images - brand new module Mojolicious::Plugin::Images  [![Build Status](https://travis-ci.org/alexbyk/mojo-images.svg)](https://travis-ci.org/alexbyk/mojo-images)
 
 # VERSION
 
