@@ -1,7 +1,7 @@
 requires 'perl',        '5.20.0';
-requires 'Mojolicious', '5.0';
-requires 'IO::All',     '5.0';
-requires 'Imager',      '1.0';
+requires 'Mojolicious', '5.28';
+requires 'IO::All',     '0';
+requires 'Imager',      '0';
 
 on test => sub {
   requires 'Test::More', '0.88';
