@@ -14,21 +14,40 @@ has url_prefix => '/images';
 has 'transform';
 has 'controller';
 
+# maybe too hard
+has check_id => sub {
+  sub {
+    my $id = shift;
+    die "bad id $id" unless $id =~ /^[\-\w\d\/]+$/;
+    return $id;
+    }
+};
+
 
 sub url($self, $id) {
-  my $fname = $id . $self->suffix . ($self->ext ? '.' . $self->ext : '');
+  my $fname
+    = $self->check_id->($id)
+    . $self->suffix
+    . ($self->ext ? '.' . $self->ext : '');
   Mojo::Path->new($self->url_prefix)->trailing_slash(1)->merge($fname);
 }
 
 sub filepath($self, $id) {
+
+  $id = $self->check_id->($id);
   my $fname = $id . $self->suffix . ($self->ext ? '.' . $self->ext : '');
-  Mojo::Path->new($self->dir)->trailing_slash(1)->merge($fname);
+  io->catfile($self->dir, $fname) . '';
 }
 
-sub exists ($self, $id) { io($self->filepath($id))->exists; }
+sub exists ($self, $id) {
+  io($self->filepath($id))->exists;
+}
 
 sub read ($self, $id) {
-  Imager::->new(file => $self->filepath($id), %{$self->read_options || {}});
+  Imager::->new(
+    file => $self->filepath($self->check_id->($id)),
+    %{$self->read_options || {}}
+  );
 }
 
 sub write($self, $id, $img) {

@@ -32,7 +32,7 @@ my $dest   = $c->images->dest;
 isa_ok $origin, 'Mojolicious::Plugin::Images::Image::Origin', "Right class";
 isa_ok $dest,   'Mojolicious::Plugin::Images::Image::Dest',   "Right class";
 
-my $id   = rand();
+my $id   = int(rand() * 10000);
 my $path = $origin->filepath($id);
 
 is $path, "$tmpdir/images/media/$id-origin.jpg", "right path";
@@ -70,7 +70,7 @@ isa_ok $dest->read($id), 'Imager', 'Right class';
 is $dest->filepath($id), "$tmpdir/images/media/$id-dest.jpg", "right path";
 
 # dest: read method call sync
-$id = rand;
+$id = int(rand() * 10000);
 $origin->upload($id, test_upload);
 ok $dest->read($id),   "read method also syncronized";
 ok $dest->exists($id), "exists after read";
