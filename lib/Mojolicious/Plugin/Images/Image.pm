@@ -18,7 +18,7 @@ has 'controller';
 has check_id => sub {
   sub {
     my $id = shift;
-    die "bad id $id" unless $id =~ /^[\-\w\d\/]+$/;
+    die "bad id $id" unless $id =~ /^[\ \-\w\d\/]+$/;
     return $id;
     }
 };
