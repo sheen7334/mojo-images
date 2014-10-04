@@ -1,9 +1,15 @@
 package Mojolicious::Plugin::Images;
-use strict;
-use warnings;
+use Mojo::Base -base;
+use 5.20.0;
+use experimental 'signatures';
 
 # VERSION
-sub foo { return 1; }
+
+
+sub register($self, $app, $options) {
+
+
+}
 
 1;
 
