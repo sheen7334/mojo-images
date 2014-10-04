@@ -14,9 +14,14 @@ sub _action($c, $moniker) {
 }
 
 sub _route($app, $moniker, $opts) {
+  my $placeholder = '(*img)';
+  my $end = $opts->{suffix} // '';
+  $end .= ".${\$opts->{ext}}" if $opts->{ext};
 
   my $path = Mojo::Path->new($opts->{url_prefix})->leading_slash(1)
-    ->trailing_slash(1)->merge('(*img)' . ($opts->{suffix} // '') . '.jpg');
+    ->trailing_slash(1)->merge("${placeholder}${end}");
+
+  $app->log->debug("Installing route GET $path for Images '$moniker'");
   $app->routes->get("$path")->to(cb => sub { _action(shift, $moniker) });
 }
 
@@ -25,19 +30,23 @@ sub _class($from) {
   return $from ? "${ns}::Dest" : "${ns}::Origin";
 }
 
+sub _defaults {
+  return (ext => 'jpg', dir => 'public/images', url_prefix => '/images');
+}
+
 sub register($self, $app, $options) {
 
   foreach my $moniker (keys %$options) {
 
     # helper
-    my %opts  = %{$options->{$moniker}};
+    my %opts = (_defaults(), %{$options->{$moniker}});
     my $class = _class($opts{from});
 
     # defaults
     $opts{suffix} //= "-$moniker";
 
     $app->log->debug(sprintf "Creating helper images.%s(%s): {%s};",
-      $moniker, $class, join(', ', map {"$_=> '$opts{$_}'"} sort keys %opts));
+      $moniker, $class, join(', ', map {"$_ => '$opts{$_}'"} sort keys %opts));
 
     $app->helper(
       "images.$moniker" => sub {
@@ -48,11 +57,7 @@ sub register($self, $app, $options) {
 
     # install route /$prefix/(*key)-$suffix.$ext
     _route($app, $moniker, \%opts) if defined $opts{url_prefix};
-
-
   }
-
-
 }
 
 1;

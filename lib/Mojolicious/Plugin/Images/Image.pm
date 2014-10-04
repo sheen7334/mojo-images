@@ -6,11 +6,7 @@ use IO::All;
 use Imager;
 use Mojo::URL;
 
-has ext => 'jpg';
-has dir => 'public/images';
-
-has [qw(suffix  write_options read_options)];
-has url_prefix => '/images';
+has [qw(url_prefix ext dir suffix write_options read_options)];
 has 'transform';
 has 'controller';
 
