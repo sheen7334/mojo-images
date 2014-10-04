@@ -6,22 +6,23 @@ use IO::All;
 use Imager;
 use Mojo::Path;
 
-has [qw(url_prefix write_options read_options)];
-has [qw(prefix suffix )] => '';
 has ext => 'jpg';
-has dir => sub { die "You have to define a 'dir' attribute value" };
+has dir => 'public/images';
+
+has [qw(suffix  write_options read_options)];
+has url_prefix => '/images';
 has 'transform';
 has 'controller';
 
 
 sub url($self, $id) {
-  Mojo::Path->new($self->url_prefix)->trailing_slash(1)
-    ->merge("${id}${\$self->suffix}.${\$self->ext}");
+  my $fname = $id . $self->suffix . ($self->ext ? '.' . $self->ext : '');
+  Mojo::Path->new($self->url_prefix)->trailing_slash(1)->merge($fname);
 }
 
 sub filepath($self, $id) {
-  my $dir = Mojo::Path->new($self->dir)->trailing_slash(1)
-    ->merge("${id}${\$self->suffix}.${\$self->ext}");
+  my $fname = $id . $self->suffix . ($self->ext ? '.' . $self->ext : '');
+  Mojo::Path->new($self->dir)->trailing_slash(1)->merge($fname);
 }
 
 sub exists ($self, $id) { io($self->filepath($id))->exists; }

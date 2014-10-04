@@ -24,8 +24,9 @@ my $options = {
 
 my $app = Mojolicious->new;
 $app->plugin('Images', $options);
-my $origin = $app->build_controller->images->origin;
-my $dest   = $app->build_controller->images->dest;
+my $c      = $app->build_controller;
+my $origin = $c->images->origin;
+my $dest   = $c->images->dest;
 
 # without form Origin, with: Dest
 isa_ok $origin, 'Mojolicious::Plugin::Images::Image::Origin', "Right class";

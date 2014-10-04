@@ -15,6 +15,9 @@ sub register($self, $app, $options) {
     my %opts = %{$options->{$k}};
     my $type = $opts{from} ? 'Dest' : 'Origin';
 
+    # defaults
+    $opts{suffix} //= "-$k";
+
     $app->log->debug("Creating helper images.$k($type): {"
         . join(', ', map {"$_=> '$opts{$_}'"} sort keys %opts)
         . "}");
