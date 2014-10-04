@@ -10,6 +10,8 @@ has [qw(url_prefix write_options read_options)];
 has [qw(prefix suffix )] => '';
 has ext => 'jpg';
 has dir => sub { die "You have to define a 'dir' attribute value" };
+has 'transform';
+has 'controller';
 
 
 sub url($self, $id) {
@@ -32,7 +34,17 @@ sub write($self, $id, $img) {
   my $filepath = $self->filepath($id);
   my $dir      = io->file($filepath)->filepath;
   io->dir($dir)->mkpath unless io->dir($dir)->exists;
-  $img->write(file => $filepath, %{$self->write_options || {}})
+  my $new;
+  my $trans = $self->transform;
+
+  if (ref $trans eq 'CODE') {
+    $new = $trans->($img);
+  }
+  else {
+    $new = $img;
+  }
+
+  $new->write(file => $filepath, %{$self->write_options || {}})
     or die Imager::->errstr;
 }
 
