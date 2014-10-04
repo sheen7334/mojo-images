@@ -7,8 +7,10 @@ use Exporter 'import';
 use Imager;
 use Mojo::Asset::Memory;
 use Mojo::Upload;
+use Mojo::Util 'steady_time';
 
-our @EXPORT_OK = (qw(test_upload test_image));
+
+our @EXPORT_OK = (qw(test_upload test_image uniq_id));
 our %EXPORT_TAGS = (all => \@EXPORT_OK);
 
 sub test_image($x = 1024, $y = 800) {
@@ -29,6 +31,12 @@ sub test_upload($x = 1024, $y = 800) {
   my $upload = Mojo::Upload->new(asset => $asset);
 }
 
+sub uniq_id {
+  my $id = steady_time . rand;
+  $id =~ s/\./-/g;
+  $id;
+}
+
 1;
 
 =head1 SYNOPSIS
@@ -45,6 +53,12 @@ sub test_upload($x = 1024, $y = 800) {
 =head1 DESCRIPTION
 
 Helpful functions for testing purposes
+
+=method uniq_id
+
+  my $id = uniq_id;
+
+Returns uniq id
 
 =method test_image($w, $h)
 

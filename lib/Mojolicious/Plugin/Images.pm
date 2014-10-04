@@ -10,13 +10,21 @@ use Mojolicious::Plugin::Images::Image::Origin;
 # VERSION
 
 sub _action($c, $moniker) {
+  my $id = $c->stash('images_id');
   $c->render(text => 'foo');
+  my $img = $c->images->$moniker;
+
+  $c->app->log->debug("Images $moniker: $id");
+  return $c->reply->static($img->url($id))
+    if $img->exists($id) || $img->sync($id);
+
+  return $c->reply->not_found;
 }
 
 # install route /$prefix/(*key)-$suffix.$ext
 sub _route($app, $moniker, $opts) {
 
-  my $placeholder = '(*img)';
+  my $placeholder = '(*images_id)';
   my $end = $opts->{suffix} // '';
   $end .= ".${\$opts->{ext}}" if $opts->{ext};
   my $path = Mojo::Path->new($opts->{url_prefix})->leading_slash(1)
@@ -24,6 +32,7 @@ sub _route($app, $moniker, $opts) {
 
   $app->log->debug("Installing route GET $path for Images '$moniker'");
   $app->routes->get("$path")->to(cb => sub { _action(shift, $moniker) });
+
 }
 
 sub _class($from) {
@@ -43,8 +52,13 @@ sub register($self, $app, $options) {
     $opts{suffix} //= "-$moniker";
     my $class = _class($opts{from});
 
-    $app->log->debug(sprintf "Creating helper images.%s(%s): {%s};",
-      $moniker, $class, join(', ', map {"$_ => '$opts{$_}'"} sort keys %opts));
+    $app->log->debug(
+      sprintf "Creating helper images.%s(%s): {%s};",
+      $moniker, $class,
+      join(
+        ', ', map {"$_ => '${\( $opts{$_} // 'undef' ) }'"} sort keys %opts
+      )
+    );
     $app->helper(
       "images.$moniker" => sub {
         $class->new(%opts, controller => shift);

@@ -2,6 +2,7 @@ use Mojo::Base -strict;
 use Test::More;
 use Mojolicious;
 use Mojolicious::Plugin::Images::Test ':all';
+use Mojo::Util 'steady_time';
 use Imager;
 use IO::All 'tmpdir';
 
@@ -32,7 +33,7 @@ my $dest   = $c->images->dest;
 isa_ok $origin, 'Mojolicious::Plugin::Images::Image::Origin', "Right class";
 isa_ok $dest,   'Mojolicious::Plugin::Images::Image::Dest',   "Right class";
 
-my $id   = int(rand() * 10000);
+my $id   = uniq_id;
 my $path = $origin->filepath($id);
 
 is $path, "$tmpdir/images/media/$id-origin.jpg", "right path";
@@ -70,7 +71,7 @@ isa_ok $dest->read($id), 'Imager', 'Right class';
 is $dest->filepath($id), "$tmpdir/images/media/$id-dest.jpg", "right path";
 
 # dest: read method call sync
-$id = int(rand() * 10000);
+$id = uniq_id;
 $origin->upload($id, test_upload);
 ok $dest->read($id),   "read method also syncronized";
 ok $dest->exists($id), "exists after read";
