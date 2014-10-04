@@ -11,9 +11,8 @@ my $options = {
   origin =>
     {dir => "$tmpdir/images/media/", suffix => '-origin', url_prefix => undef},
   dest => {
-    dir    => "$tmpdir/images/media/",
-    suffix => '-dest',
-    from   => 'origin',
+    dir  => "$tmpdir/images/media/",
+    from => 'origin',
     transform =>
       sub { shift()->scale(xpixels => 69, ypixels => 69, type => 'nonprop') }
   }
