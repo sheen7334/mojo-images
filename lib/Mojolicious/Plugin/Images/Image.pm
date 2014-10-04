@@ -4,7 +4,7 @@ use 5.20.0;
 use experimental 'signatures';
 use IO::All;
 use Imager;
-use Mojo::Path;
+use Mojo::URL;
 
 has ext => 'jpg';
 has dir => 'public/images';
@@ -28,7 +28,9 @@ sub url($self, $id) {
     = $self->check_id->($id)
     . $self->suffix
     . ($self->ext ? '.' . $self->ext : '');
-  Mojo::Path->new($self->url_prefix)->trailing_slash(1)->merge($fname);
+  my $url = Mojo::URL->new($self->url_prefix);
+  $url->path->leading_slash(1)->trailing_slash(1)->merge($fname);
+  $url;
 }
 
 sub filepath($self, $id) {

@@ -8,10 +8,15 @@ use Mojolicious::Plugin::Images::Image::Origin;
 
 # VERSION
 
+sub action {
+}
+
 sub register($self, $app, $options) {
   my $ns = "Mojolicious::Plugin::Images::Image";
 
   foreach my $k (keys %$options) {
+
+    # helper
     my %opts = %{$options->{$k}};
     my $type = $opts{from} ? 'Dest' : 'Origin';
 
@@ -27,7 +32,12 @@ sub register($self, $app, $options) {
         "$ns::$type"->new(%opts, controller => $c);
       }
     );
+
+
+
+
   }
+
 
 }
 

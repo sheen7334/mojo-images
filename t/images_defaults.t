@@ -2,7 +2,6 @@ use Mojo::Base -strict;
 use Test::More;
 use Mojolicious;
 use Mojolicious::Plugin::Images::Test ':all';
-use Data::Dumper;
 
 my $options = {
   first  => {},
