@@ -6,44 +6,33 @@ use Mojolicious::Plugin::Images::Test ':all';
 use Mojolicious::Plugin::Images::Image::Dest;
 use Mojolicious::Plugin::Images::Image::Origin;
 use Imager;
-
 use IO::All 'tmpdir';
-my $tmpdir = io()->tmpdir;
+
+my $tmpdir  = io()->tmpdir;
+my $options = {
+  origin => {
+    dir        => "$tmpdir/images/media/",
+    suffix     => '-origin',
+    url_prefix => '/media',
+  },
+  dest => {
+    dir        => "$tmpdir/images/media/",
+    suffix     => '-dest',
+    url_prefix => '/media',
+    from       => 'origin',
+    transform =>
+      sub { shift()->scale(xpixels => 69, ypixels => 69, type => 'nonprop') }
+  }
+};
 
 my $app = Mojolicious->new;
-$app->helper(
-  'images.origin' => sub {
-    my $c = shift;
-    Mojolicious::Plugin::Images::Image::Origin->new(
-      dir        => "$tmpdir/images/media/",
-      suffix     => '-origin',
-      url_prefix => '/media',
-      controller => $c,
-    );
-
-  }
-);
-
-$app->helper(
-  'images.dest' => sub {
-    my $c = shift;
-    Mojolicious::Plugin::Images::Image::Dest->new(
-      dir        => "$tmpdir/images/media/",
-      suffix     => '-dest',
-      url_prefix => '/media',
-      from       => 'origin',
-      transform =>
-        sub { shift()->scale(xpixels => 69, ypixels => 69, type => 'nonprop') }
-      ,
-      controller => $c,
-    );
-
-  }
-);
-
-
+$app->plugin('Images', $options);
 my $origin = $app->build_controller->images->origin;
 my $dest   = $app->build_controller->images->dest;
+
+# without form Origin, with: Dest
+isa_ok $origin, 'Mojolicious::Plugin::Images::Image::Origin', "Right class";
+isa_ok $dest,   'Mojolicious::Plugin::Images::Image::Dest',   "Right class";
 
 my $id   = rand();
 my $path = $origin->filepath($id);

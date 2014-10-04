@@ -1,13 +1,24 @@
 package Mojolicious::Plugin::Images;
-use Mojo::Base -base;
+use Mojo::Base 'Mojolicious::Plugin';
 use 5.20.0;
 use experimental 'signatures';
 
-# VERSION
 
+# VERSION
 
 sub register($self, $app, $options) {
 
+  my $ns = "Mojolicious::Plugin::Images::Image";
+  foreach my $k (keys %$options) {
+    $app->helper(
+      "images.$k" => sub {
+        my $c    = shift;
+        my %opts = %{$options->{$k}};
+        my $type = $opts{from} ? 'Dest' : 'Origin';
+        "$ns::$type"->new(%opts, controller => $c);
+      }
+    );
+  }
 
 }
 
