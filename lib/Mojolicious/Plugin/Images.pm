@@ -18,9 +18,8 @@ sub register($self, $app, $options) {
     # defaults
     $opts{suffix} //= "-$k";
 
-    $app->log->debug("Creating helper images.$k($type): {"
-        . join(', ', map {"$_=> '$opts{$_}'"} sort keys %opts)
-        . "}");
+    $app->log->debug(sprintf "Creating helper images.%s(%s): {%s};",
+      $k, $type, join(', ', map {"$_=> '$opts{$_}'"} sort keys %opts));
 
     $app->helper(
       "images.$k" => sub {

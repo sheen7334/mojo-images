@@ -23,7 +23,6 @@ has check_id => sub {
     }
 };
 
-
 sub url($self, $id) {
   my $fname
     = $self->check_id->($id)

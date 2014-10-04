@@ -9,6 +9,4 @@ sub upload ($self, $id, $upload) {
   $self->write($id, $img);
 }
 
-
 1;
-
