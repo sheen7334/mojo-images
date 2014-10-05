@@ -51,9 +51,19 @@ sub _trans($self, $id, $img) {
     controller => $self->controller,
     image      => $img,
   );
+
   if (ref $trans eq 'CODE') {
     plugin_log($self->controller->app, "Transformation to cb with id $id");
     $new = $trans->(Mojolicious::Plugin::Images::Transformer->new(%args));
+  }
+
+  elsif (ref $trans eq 'ARRAY') {
+    $new = $img;
+    my @arr = @$trans;
+    while (@arr) {
+      my ($act, $args) = (shift @arr, shift @arr);
+      $new = $new->$act(%$args);
+    }
   }
 
   elsif ($trans && $trans =~ /^([\w\-:]+)\#([\w]+)$/) {
@@ -67,6 +77,7 @@ sub _trans($self, $id, $img) {
   else {
     $new = $img;
   }
+  return $new;
 }
 
 sub write($self, $id, $img) {

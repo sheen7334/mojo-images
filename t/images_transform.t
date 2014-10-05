@@ -50,6 +50,11 @@ $app->plugin(
       dir       => $tmpdir,
       from      => 'img1000'
     },
+    img200x10 => {
+      transform => [scale => {xpixels => 200}, crop => {height => 10}],
+      dir       => $tmpdir,
+      from      => 'img1000'
+    },
 
   }
 );
@@ -57,9 +62,10 @@ $c = $app->build_controller;
 my $id = uniq_id;
 
 $c->images->img1000->upload($id, test_upload);
-is $c->images->img1000->read($id)->getwidth, 1000, "right width";
-is $c->images->img99->read($id)->getwidth,   99,   "right width";
-is $c->images->img199->read($id)->getwidth,  199,  "right width";
+is $c->images->img1000->read($id)->getwidth,    1000, "right width";
+is $c->images->img99->read($id)->getwidth,      99,   "right width";
+is $c->images->img200x10->read($id)->getwidth,  200,  "right width";
+is $c->images->img200x10->read($id)->getheight, 10,   "right height";
 
 
 done_testing;
