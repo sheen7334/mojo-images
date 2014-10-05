@@ -1,4 +1,7 @@
 use Mojo::Base -strict;
+use 5.20.0;
+use experimental 'signatures';
+
 use Test::More;
 use Mojolicious;
 use Mojolicious::Plugin::Images::Test ':all';
@@ -18,8 +21,9 @@ my $options = {
     suffix     => '-dest',
     url_prefix => '/media',
     from       => 'origin',
-    transform =>
-      sub { shift()->scale(xpixels => 69, ypixels => 69, type => 'nonprop') }
+    transform  => sub($t) {
+      $t->image->scale(xpixels => 69, ypixels => 69, type => 'nonprop');
+    }
   }
 };
 

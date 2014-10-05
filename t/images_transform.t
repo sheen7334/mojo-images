@@ -1,4 +1,4 @@
-use Mojo::Base -strict;
+use Mojo::Base -base;
 use 5.20.0;
 use experimental 'signatures';
 
@@ -27,11 +27,39 @@ $foo = $c->images->foo;
 is $foo->namespace, 'MyApp';
 
 
-#plugin 'Images' => {foo => {transform => '#trans11', dir => $tmpdir}};
-#$c   = app->build_controller;
-#
-#my $id = uniq_id;
-##say $c->images->foo->upload($id, test_upload);
+@MyApp::Trans::ISA = ('Mojolicious::Plugin::Images::Transformer');
+@Outer::Trans::ISA = ('Mojolicious::Plugin::Images::Transformer');
+
+monkey_patch('MyApp::Trans',
+  trans1000 => sub($t) { $t->image->scale(xpixels => 1000) });
+monkey_patch('Outer::Trans',
+  trans99 => sub($t) { $t->image->scale(xpixels => 99) });
+
+$app = MyApp::->new();
+$app->plugin(
+  'Images' => {
+    img1000 => {transform => 'trans#trans1000', dir => $tmpdir},
+    img99   => {
+      transform => 'outer-trans#trans99',
+      dir       => $tmpdir,
+      namespace => '',
+      from      => 'img1000'
+    },
+    img199 => {
+      transform => sub($t) { $t->image->scale(xpixels => 199) },
+      dir       => $tmpdir,
+      from      => 'img1000'
+    },
+
+  }
+);
+$c = $app->build_controller;
+my $id = uniq_id;
+
+$c->images->img1000->upload($id, test_upload);
+is $c->images->img1000->read($id)->getwidth, 1000, "right width";
+is $c->images->img99->read($id)->getwidth,   99,   "right width";
+is $c->images->img199->read($id)->getwidth,  199,  "right width";
 
 
 done_testing;

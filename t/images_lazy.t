@@ -1,4 +1,7 @@
-use Mojo::Base -strict;
+use Mojo::Base -base;
+use 5.20.0;
+use experimental 'signatures';
+
 use Mojolicious::Lite;
 use Test::More;
 use Test::Mojo;
@@ -11,10 +14,11 @@ my $options = {
   origin =>
     {dir => "$tmpdir/origin/images", suffix => '-origin', url_prefix => undef},
   dest => {
-    dir  => "$tmpdir/dest/images",
-    from => 'origin',
-    transform =>
-      sub { shift()->scale(xpixels => 69, ypixels => 69, type => 'nonprop') }
+    dir       => "$tmpdir/dest/images",
+    from      => 'origin',
+    transform => sub($t) {
+      $t->image->scale(xpixels => 69, ypixels => 69, type => 'nonprop');
+    }
   },
 
   origin_public => {dir => "$tmpdir/origin_public/images"},

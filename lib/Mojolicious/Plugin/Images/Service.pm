@@ -7,6 +7,7 @@ use Imager;
 use Mojo::URL;
 use Mojo::Path;
 use Mojolicious::Plugin::Images::Util ':all';
+use Mojolicious::Plugin::Images::Transformer;
 use Mojo::Util 'camelize';
 
 has [qw(namespace url_prefix ext dir suffix write_options read_options)];
@@ -40,29 +41,28 @@ sub read ($self, $id) {
   );
 }
 
+
 sub _trans($self, $id, $img) {
   my $trans = $self->transform;
   my $new;
   my %args = (
-    helper     => $self,
+    service    => $self,
     id         => $id,
     controller => $self->controller,
-    app        => $self->controller->app
+    image      => $img,
   );
   if (ref $trans eq 'CODE') {
-    $new = $trans->($img);
+    plugin_log($self->controller->app, "Transformation to cb with id $id");
+    $new = $trans->(Mojolicious::Plugin::Images::Transformer->new(%args));
   }
 
-=pod
-  elsif ($trans && $trans =~ /^([\w\-:]*?)\#([\w]+)$/) {
-    my ($class, $sub) = ($1, $2);
-    unless ($class) {
-      my $app = $self->controller->app;
-      $class = $app->isa('Mojolicious::Lite') ? 'main' : ref $app;
-
-    }
+  elsif ($trans && $trans =~ /^([\w\-:]+)\#([\w]+)$/) {
+    my ($class, $action) = (camelize($1), $2);
+    $class = $self->namespace . "::$class" if $self->namespace;
+    plugin_log($self->controller->app,
+      "Transformation to class $class and action $action with id $id");
+    $new = $class->new(%args)->$action;
   }
-=cut
 
   else {
     $new = $img;
