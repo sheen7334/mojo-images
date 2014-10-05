@@ -1,31 +1,30 @@
 #!/usr/bin/env perl
 use Mojolicious::Lite;
+use 5.20.0;
+use experimental 'signatures';
 use lib '../lib';
 
 plugin 'Mojolicious::Plugin::Images', {
   big   => {},
   small => {
     from      => 'big',
-    transform => sub {
-      shift->scale(xpixels => 242, ypixels => 200, type => 'min');
+    transform => sub($img) {
+      $img->scale(xpixels => 242, ypixels => 200, type => 'min');
     }
   }
 };
 
-post '/' => sub {
-  my $c  = shift;
+post '/' => sub($c) {
   my $id = time + int(rand() * 100000);
   $c->images->big->upload($id, $c->req->upload('image'));
-  say $c->images->small->url($id);
   $c->redirect_to("/$id.html");
-
 };
 
 get '/'    => sub { shift->render('index') };
 get '/:id' => sub { shift->render('result') };
 
-
 app->start;
+
 __DATA__
 
 @@ result.html.ep
