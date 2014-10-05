@@ -4,9 +4,9 @@ use Test::More;
 use Test::Mojo;
 use Mojolicious::Plugin::Images::Test ':all';
 use Imager;
-use IO::All 'tmpdir';
+use IO::All;
 
-my $tmpdir = io()->tmpdir;
+my $tmpdir  = io()->tmpdir;
 my $options = {
   origin =>
     {dir => "$tmpdir/origin/images", suffix => '-origin', url_prefix => undef},
@@ -39,7 +39,6 @@ $t->get_ok("/images/$id-origin.jpg")->status_is(404);
 $t->get_ok("/images/$id-bad.jpg")->status_is(404);
 $t->get_ok("/images/$id-dest.JPG")->status_is(404);
 $t->get_ok("/images/$id-dest")->status_is(404);
-
 
 done_testing;
 

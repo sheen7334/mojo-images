@@ -30,26 +30,26 @@ sub url($self, $id) {
   $url;
 }
 
-sub fullname($self, $id) {
+sub canonpath($self, $id) {
   $id = $self->check_id->($id);
   my $fname = $id . $self->suffix . ($self->ext ? '.' . $self->ext : '');
-  io->catfile($self->dir, $fname) . '';
+  io->catfile($self->dir, $fname)->canonpath;
 }
 
 sub exists ($self, $id) {
-  io($self->fullname($id))->exists;
+  io($self->canonpath($id))->exists;
 }
 
 sub read ($self, $id) {
   Imager::->new(
-    file => $self->fullname($self->check_id->($id)),
+    file => $self->canonpath($self->check_id->($id)),
     %{$self->read_options || {}}
   );
 }
 
 sub write($self, $id, $img) {
-  my $fullname = $self->fullname($id);
-  my $dir      = io->file($fullname)->filepath;
+  my $canonpath = $self->canonpath($id);
+  my $dir       = io->file($canonpath)->filepath;
   io->dir($dir)->mkpath unless io->dir($dir)->exists;
   my $new;
   my $trans = $self->transform;
@@ -61,7 +61,7 @@ sub write($self, $id, $img) {
     $new = $img;
   }
 
-  $new->write(file => $fullname, %{$self->write_options || {}})
+  $new->write(file => $canonpath, %{$self->write_options || {}})
     or die Imager::->errstr;
 }
 

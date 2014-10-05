@@ -20,46 +20,26 @@ my $second = $c->images->second;
 my $third  = $c->images->third;
 
 use IO::All;
-is $first->fullname('foo/bar'), 'public/images/foo/bar-first.jpg',
-  'right fullname';
+is $first->canonpath('foo/bar'), 'public/images/foo/bar-first.jpg',
+  'right canonpath';
 
 is $first->dir,        'public/images', 'dir is public/images by default';
 is $first->url_prefix, '/images',       'dir is public/images by default';
 is $first->suffix,     "-first",        'Right default suffix';
 is $first->ext,        'jpg';
-is $first->fullname('foo/bar'), 'public/images/foo/bar-first.jpg',
-  'right fullname';
+is $first->canonpath('foo/bar'), 'public/images/foo/bar-first.jpg',
+  'right canonpath';
 is $first->url('foo/bar'), '/images/foo/bar-first.jpg';
 'right url';
 
 is $second->ext,    '', 'no ext';
 is $second->suffix, '', 'no suffix';
-is $second->fullname('foo/bar'), 'public/images/foo/bar', 'right default name';
-is $second->url('foo/bar'),      '/images/foo/bar',       'right url';
+is $second->canonpath('foo/bar'), 'public/images/foo/bar',
+  'right default name';
+is $second->url('foo/bar'), '/images/foo/bar', 'right url';
 
 # utf8
-is $second->fullname('привет'), 'public/images/привет',
+is $second->canonpath('привет'), 'public/images/привет',
   'right url';
-
-# security for dummies
-foreach my $meth (qw(url fullname exists read)) {
-  is eval { $first->$meth('../ff') }, undef, "right death on $meth";
-  like $@, qr/bad id/, "right error";
-}
-
-is eval { $first->write('../ff', test_image) }, undef, "right death on write";
-like $@, qr/bad id/, "right error";
-is eval { $first->upload('../ff', test_upload) }, undef,
-  "right death on upload";
-like $@, qr/bad id/, "right error";
-
-# utf8
-is $third->url('❤'),      '/images/%E2%9D%A4-third.jpg';
-is $third->fullname('❤'), 'public/images/❤-third.jpg';
-
-# some wied things
-is $third->url_prefix('/foo///')->url('bar//baz'),  '/foo/bar/baz-third.jpg';
-is $third->url_prefix('/foo///')->url('/bar//baz'), '/foo/bar/baz-third.jpg';
-is $third->url_prefix('foo')->url('bar'),           'foo/bar-third.jpg';
 
 done_testing;
