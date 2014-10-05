@@ -1,13 +1,31 @@
 package Mojolicious::Plugin::Images::Util;
-use Mojo::Base 'Mojolicious::Plugin';
+use Mojo::Base -base;
 use 5.20.0;
 use experimental 'signatures';
 
 use Exporter 'import';
+use IO::All;
+
 our @EXPORT_OK = (qw(install_route expand_static));
 our %EXPORT_TAGS = (all => \@EXPORT_OK);
 
-sub expand_static {
+sub expand_static($app, $img) {
+  my $paths = $app->static->paths;
+  my $static_path = $img->static_path or return;
+  say $static_path;
+  say $paths->[0];
+}
+
+# install route /$prefix/(*key)-$suffix.$ext
+sub install_route($app, $moniker, $opts) {
+  my $placeholder = '(*images_id)';
+  my $end = $opts->{suffix} // '';
+  $end .= ".${\$opts->{ext}}" if $opts->{ext};
+  my $path = Mojo::Path->new($opts->{url_prefix})->leading_slash(1)
+    ->trailing_slash(1)->merge("${placeholder}${end}");
+
+  $app->log->debug("Installing route GET $path for Images '$moniker'");
+  $app->routes->get("$path")->to(cb => sub { _action(shift, $moniker) });
 
 }
 
@@ -22,18 +40,3 @@ sub _action($c, $moniker) {
 
   return $c->reply->not_found;
 }
-
-# install route /$prefix/(*key)-$suffix.$ext
-sub install_route($app, $moniker, $opts) {
-
-  my $placeholder = '(*images_id)';
-  my $end = $opts->{suffix} // '';
-  $end .= ".${\$opts->{ext}}" if $opts->{ext};
-  my $path = Mojo::Path->new($opts->{url_prefix})->leading_slash(1)
-    ->trailing_slash(1)->merge("${placeholder}${end}");
-
-  $app->log->debug("Installing route GET $path for Images '$moniker'");
-  $app->routes->get("$path")->to(cb => sub { _action(shift, $moniker) });
-
-}
-

@@ -25,7 +25,10 @@ sub static_path($self) {
     ->to_route;
   my $dir = io->dir($self->dir)->canonpath;
   $dir =~ s/$prefix$// or return;
-  io->dir($dir)->absolute;
+
+  io->dir($dir)->is_absolute
+    ? io->dir($dir)->absolute
+    : $self->controller->app->home->rel_dir($dir);
 }
 
 sub url($self, $id) {
