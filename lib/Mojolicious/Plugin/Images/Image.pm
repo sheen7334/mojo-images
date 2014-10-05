@@ -52,7 +52,6 @@ sub write($self, $id, $img) {
   else {
     $new = $img;
   }
-
   $new->write(file => $canonpath, %{$self->write_options || {}})
     or die Imager::->errstr;
 }
