@@ -2,14 +2,10 @@ use Mojo::Base -strict;
 use Test::More;
 use Mojolicious;
 use Mojolicious::Plugin::Images::Test ':all';
+use IO::All;
 
-my $options = {
-  first  => {},
-  second => {ext => '', suffix => '', from => 'first'},
-  third  => {
-    check_id => sub {shift}
-  }
-};
+my $options
+  = {first => {}, second => {ext => '', suffix => '', from => 'first'},};
 
 my $app = Mojolicious->new;
 $app->plugin('Images', $options);
@@ -17,9 +13,7 @@ my $c = $app->build_controller;
 
 my $first  = $c->images->first;
 my $second = $c->images->second;
-my $third  = $c->images->third;
 
-use IO::All;
 is $first->canonpath('foo/bar'), 'public/images/foo/bar-first.jpg',
   'right canonpath';
 

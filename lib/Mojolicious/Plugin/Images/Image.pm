@@ -10,33 +10,18 @@ has [qw(url_prefix ext dir suffix write_options read_options)];
 has 'transform';
 has 'controller';
 
+my $INSECURE_IDS = $ENV{IMAGES_ALLOW_INSECURE_IDS};
+
 # maybe too hard
-has check_id => sub {
-  sub {
-    my $id = shift;
-    die "bad id $id" unless $id =~ /^[\ \-\w\d\/]+$/;
-    return $id;
-    }
-};
-
-sub static_path($self) {
-  return unless defined $self->url_prefix;
-
-  my $dir = io->dir($self->dir)->canonpath;
-  my $prefix
-    = Mojo::Path->new($self->url_prefix)->canonicalize->trailing_slash(0)
-    ->to_route;
-
-  $dir =~ s/$prefix$// or return if ($prefix ne '/');
-
-  io->dir($dir)->is_absolute
-    ? io->dir($dir)->absolute . ''
-    : $self->controller->app->home->rel_dir($dir);
+sub check_id($self, $id) {
+  return $id if $INSECURE_IDS;
+  die "bad id $id" unless $id =~ /^[\ \-\w\d\/]+$/;
+  return $id;
 }
 
 sub url($self, $id) {
   my $fname
-    = $self->check_id->($id)
+    = $self->check_id($id)
     . $self->suffix
     . ($self->ext ? '.' . $self->ext : '');
   my $fpath = Mojo::Path->new($fname)->leading_slash(0);
@@ -46,7 +31,7 @@ sub url($self, $id) {
 }
 
 sub canonpath($self, $id) {
-  $id = $self->check_id->($id);
+  $id = $self->check_id($id);
   my $fname = $id . $self->suffix . ($self->ext ? '.' . $self->ext : '');
   io->catfile($self->dir, $fname)->canonpath;
 }
@@ -57,7 +42,7 @@ sub exists ($self, $id) {
 
 sub read ($self, $id) {
   Imager::->new(
-    file => $self->canonpath($self->check_id->($id)),
+    file => $self->canonpath($self->check_id($id)),
     %{$self->read_options || {}}
   );
 }
