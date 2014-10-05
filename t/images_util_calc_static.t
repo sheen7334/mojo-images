@@ -5,7 +5,7 @@ use Mojolicious::Plugin::Images::Util ':all';
 use IO::All;
 
 
-my $app = Mojolicious->new;
+my $app  = Mojolicious->new;
 my $home = $app->home;
 
 # public
@@ -29,18 +29,6 @@ is $static, $dir, "right dir";
 # outside (absolute dir)
 $static = calc_static('/root/images/', 'images', $home);
 is $static , '/root', "right abs dir";
-
-$static = calc_static('/images/', 'images', $home);
-is $static , '/', "right abs dir";
-
-$static = calc_static('/', '/', $home);
-is $static , '/', "right abs dir";
-
-$static = calc_static('/', '', $home);
-is $static , '/', "right abs dir";
-
-$static = calc_static('', '', $home);
-is $static , $home, "right home dir";
 
 # deeper
 $dir = $app->home->rel_dir('public/foo');

@@ -5,25 +5,16 @@ use experimental 'signatures';
 use IO::All;
 use Imager;
 use Mojo::URL;
+use Mojo::Path;
+use Mojolicious::Plugin::Images::Util ':all';
 
 has [qw(url_prefix ext dir suffix write_options read_options)];
 has 'transform';
 has 'controller';
 
-my $INSECURE_IDS = $ENV{IMAGES_ALLOW_INSECURE_IDS};
-
-# maybe too hard
-sub check_id($self, $id) {
-  return $id if $INSECURE_IDS;
-  die "bad id $id" unless $id =~ /^[\ \-\w\d\/]+$/;
-  return $id;
-}
-
 sub url($self, $id) {
   my $fname
-    = $self->check_id($id)
-    . $self->suffix
-    . ($self->ext ? '.' . $self->ext : '');
+    = check_id($id) . $self->suffix . ($self->ext ? '.' . $self->ext : '');
   my $fpath = Mojo::Path->new($fname)->leading_slash(0);
   my $url   = Mojo::URL->new($self->url_prefix);
   $url->path($url->path->trailing_slash(1)->merge($fpath)->canonicalize);
@@ -31,9 +22,10 @@ sub url($self, $id) {
 }
 
 sub canonpath($self, $id) {
-  $id = $self->check_id($id);
+  $id = check_id($id);
   my $fname = $id . $self->suffix . ($self->ext ? '.' . $self->ext : '');
-  io->catfile($self->dir, $fname)->canonpath;
+  io->catfile(check_dir($self->dir, $self->controller->app), $fname)
+    ->canonpath;
 }
 
 sub exists ($self, $id) {
@@ -42,7 +34,7 @@ sub exists ($self, $id) {
 
 sub read ($self, $id) {
   Imager::->new(
-    file => $self->canonpath($self->check_id($id)),
+    file => $self->canonpath(check_id($id)),
     %{$self->read_options || {}}
   );
 }

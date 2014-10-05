@@ -66,8 +66,8 @@ isa_ok my $sync = $dest->sync($id), 'Imager', 'synced correctly';
 
 is $sync->getwidth,  '69', "right width of sync result";
 is $sync->getheight, '69', "right height of sync result";
-ok $dest->exists($id),   "exists after sync";
-isa_ok $dest->read($id), 'Imager', 'Right class';
+ok $dest->exists($id),    "exists after sync";
+isa_ok $dest->read($id),  'Imager', 'Right class';
 is $dest->canonpath($id), "$tmpdir/images/media/$id-dest.jpg", "right path";
 
 # dest: read method call sync
