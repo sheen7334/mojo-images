@@ -6,8 +6,22 @@ use experimental 'signatures';
 use Exporter 'import';
 use IO::All;
 
-our @EXPORT_OK = (qw(install_route expand_static));
+our @EXPORT_OK = (qw(install_route expand_static calc_static));
 our %EXPORT_TAGS = (all => \@EXPORT_OK);
+
+sub calc_static($dir, $url_prefix, $home) {
+  return unless defined $url_prefix;
+
+  $dir = io->dir($dir)->canonpath;
+  $dir = $home->rel_dir($dir) unless io->dir($dir)->is_absolute;
+
+  my $prefix = Mojo::Path->new($url_prefix)->canonicalize->to_route;
+  $prefix = Mojo::Path->new($prefix)->leading_slash(0)->trailing_slash(0);
+
+  $dir =~ s/$prefix$// or return ;
+
+  io->dir($dir)->canonpath;
+}
 
 sub expand_static($app, $img) {
   my $paths = $app->static->paths;
