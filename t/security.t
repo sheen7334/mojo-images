@@ -29,7 +29,7 @@ like $@, qr/insecure id/, "right error";
 foreach my $dir (('/', $app->home, '', undef)) {
   $first->dir($dir);
   foreach my $meth (qw(canonpath exists read)) {
-    is eval { $first->$meth('ff'); 1 }, undef, "not died on insecure $meth";
+    is eval { $first->$meth('ff'); 1 }, undef, "died on insecure $meth";
     like $@, qr/insecure dir/, "right error";
   }
   is eval { $first->write('ff', test_image); 1 }, undef, "right death";
