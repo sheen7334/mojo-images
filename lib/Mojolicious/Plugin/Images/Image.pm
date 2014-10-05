@@ -24,13 +24,13 @@ sub url($self, $id) {
     = $self->check_id->($id)
     . $self->suffix
     . ($self->ext ? '.' . $self->ext : '');
-  my $url = Mojo::URL->new($self->url_prefix);
-  $url->path->leading_slash(1)->trailing_slash(1)->merge($fname);
+  my $fpath = Mojo::Path->new($fname)->leading_slash(0);
+  my $url   = Mojo::URL->new($self->url_prefix);
+  $url->path($url->path->trailing_slash(1)->merge($fpath)->canonicalize);
   $url;
 }
 
 sub filepath($self, $id) {
-
   $id = $self->check_id->($id);
   my $fname = $id . $self->suffix . ($self->ext ? '.' . $self->ext : '');
   io->catfile($self->dir, $fname) . '';

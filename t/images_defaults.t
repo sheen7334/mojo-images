@@ -57,4 +57,9 @@ like $@, qr/bad id/, "right error";
 is $third->url('❤'),      '/images/%E2%9D%A4-third.jpg';
 is $third->filepath('❤'), 'public/images/❤-third.jpg';
 
+# some wied things
+is $third->url_prefix('/foo///')->url('bar//baz'),  '/foo/bar/baz-third.jpg';
+is $third->url_prefix('/foo///')->url('/bar//baz'), '/foo/bar/baz-third.jpg';
+is $third->url_prefix('foo')->url('bar'),           'foo/bar-third.jpg';
+
 done_testing;
