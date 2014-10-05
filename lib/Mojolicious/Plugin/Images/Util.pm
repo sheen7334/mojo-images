@@ -25,7 +25,7 @@ sub check_dir($dir, $app) {
 sub check_id($id) {
   return $id if $INSECURE_IDS;
   die "insecure id $id, set IMAGES_ALLOW_INSECURE_IDS env to allow it"
-    unless $id =~ /^[\ \-\w\d\/]+$/;
+    unless $id =~ /^[\ \-\w\/]+$/;
   return $id;
 }
 
