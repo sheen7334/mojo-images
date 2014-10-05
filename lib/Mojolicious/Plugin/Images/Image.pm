@@ -20,14 +20,22 @@ has check_id => sub {
 };
 
 sub static_path($self) {
+  return unless defined $self->url_prefix;
+
+  my $dir = io->dir($self->dir)->canonpath;
   my $prefix
     = Mojo::Path->new($self->url_prefix)->canonicalize->trailing_slash(0)
     ->to_route;
-  my $dir = io->dir($self->dir)->canonpath;
+
+  return io->dir($dir)->is_absolute
+    ? io->dir($dir)->absolute . ''
+    : $self->controller->app->home->rel_dir($dir)
+    if $prefix eq '/';
+
   $dir =~ s/$prefix$// or return;
 
   io->dir($dir)->is_absolute
-    ? io->dir($dir)->absolute
+    ? io->dir($dir)->absolute . ''
     : $self->controller->app->home->rel_dir($dir);
 }
 

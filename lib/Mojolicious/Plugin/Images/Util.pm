@@ -12,8 +12,7 @@ our %EXPORT_TAGS = (all => \@EXPORT_OK);
 sub expand_static($app, $img) {
   my $paths = $app->static->paths;
   my $static_path = $img->static_path or return;
-  say $static_path;
-  say $paths->[0];
+  push @$paths, $static_path unless grep { $_ eq $static_path } @$paths;
 }
 
 # install route /$prefix/(*key)-$suffix.$ext
@@ -26,7 +25,6 @@ sub install_route($app, $moniker, $opts) {
 
   $app->log->debug("Installing route GET $path for Images '$moniker'");
   $app->routes->get("$path")->to(cb => sub { _action(shift, $moniker) });
-
 }
 
 sub _action($c, $moniker) {

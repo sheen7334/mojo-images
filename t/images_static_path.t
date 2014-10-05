@@ -34,9 +34,23 @@ $first->dir('/root/images/')->url_prefix('images');
 is io($first->static_path) . '', '/root';
 
 # deeper
-my $dir = $app->home->rel_dir('public/foo');
+$dir = $app->home->rel_dir('public/foo');
 $first->dir('public/foo/images/')->url_prefix('/images');
 is $first->static_path, $dir;
+
+
+# /  means root of site
+$dir = $app->home->rel_dir('public/images');
+$first->dir('public/images')->url_prefix('/');
+is $first->static_path, $dir, "right value";
+
+# '' != undef
+$first->dir('public/images')->url_prefix('');
+is $first->static_path, $dir, "right value";
+
+# is hidden (without url_prefix)
+$first->dir('public/images')->url_prefix(undef);
+is $first->static_path, undef, "right undef value for hidden";
 
 # can't be found
 $first->dir('public/foo/images/bar')->url_prefix('/images');
@@ -44,6 +58,7 @@ is $first->static_path, undef, "right undef value";
 
 $first->dir('foo')->url_prefix('bar');
 is $first->static_path, undef, "right undef value";
+
 
 done_testing;
 
