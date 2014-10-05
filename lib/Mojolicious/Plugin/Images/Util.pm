@@ -48,7 +48,6 @@ sub install_route($app, $moniker, $opts) {
 
 sub _action($c, $moniker) {
   my $id = $c->stash('images_id');
-  $c->render(text => 'foo');
   my $img = $c->images->$moniker;
 
   plugin_log($c->app, "Generating $moniker: $id");
