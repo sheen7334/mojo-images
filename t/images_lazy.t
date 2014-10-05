@@ -43,7 +43,6 @@ ok !$c->images->dest->exists($id), "not exists yet";
 $t->get_ok("/images/$id-dest.jpg")->status_is(200);
 ok $c->images->dest->exists($id), "already exists";
 
-
 $t->get_ok("/images/$id-origin.jpg")->status_is(404);
 $t->get_ok("/images/$id-bad.jpg")->status_is(404);
 $t->get_ok("/images/$id-dest.JPG")->status_is(404);

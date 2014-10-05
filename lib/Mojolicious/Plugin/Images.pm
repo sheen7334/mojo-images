@@ -28,13 +28,12 @@ sub register($self, $app, $options) {
     $opts{suffix} //= "-$moniker";
     my $class = _class($opts{from});
 
-    $app->log->debug(
-      sprintf "Creating helper images.%s(%s): {%s};",
-      $moniker, $class,
-      join(
-        ', ', map {"$_ => '${\( $opts{$_} // 'undef' ) }'"} sort keys %opts
-      )
-    );
+    my $msg_attr = join(', ',
+      map {"$_ => '${\( $opts{$_} // 'undef' ) }'"} sort keys %opts);
+
+    plugin_log($app, "Creating helper images.%s(%s): {%s};",
+      $moniker, $class, $msg_attr);
+
     $app->helper(
       "images.$moniker" => sub {
         $class->new(%opts, controller => shift);
