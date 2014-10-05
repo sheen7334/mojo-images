@@ -34,7 +34,7 @@ isa_ok $origin, 'Mojolicious::Plugin::Images::Image::Origin', "Right class";
 isa_ok $dest,   'Mojolicious::Plugin::Images::Image::Dest',   "Right class";
 
 my $id   = uniq_id;
-my $path = $origin->filepath($id);
+my $path = $origin->fullname($id);
 
 is $path, "$tmpdir/images/media/$id-origin.jpg", "right path";
 ok !$origin->exists($id), "not exists yet";
@@ -68,7 +68,7 @@ is $sync->getwidth,  '69', "right width of sync result";
 is $sync->getheight, '69', "right height of sync result";
 ok $dest->exists($id),   "exists after sync";
 isa_ok $dest->read($id), 'Imager', 'Right class';
-is $dest->filepath($id), "$tmpdir/images/media/$id-dest.jpg", "right path";
+is $dest->fullname($id), "$tmpdir/images/media/$id-dest.jpg", "right path";
 
 # dest: read method call sync
 $id = uniq_id;

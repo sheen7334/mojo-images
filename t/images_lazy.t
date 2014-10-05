@@ -7,7 +7,6 @@ use Imager;
 use IO::All 'tmpdir';
 
 my $tmpdir = io()->tmpdir;
-$tmpdir = 'draft/';
 my $options = {
   origin =>
     {dir => "$tmpdir/origin/images", suffix => '-origin', url_prefix => undef},
