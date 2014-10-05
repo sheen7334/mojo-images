@@ -24,6 +24,11 @@ $img = Imager::->new(
 is $img->getwidth,  400, "right width";
 is $img->getheight, 200, "right height";
 
+$img = Imager::->new(
+  data => test_controller(400, 200, 'myimage')->req->upload('myimage')->slurp);
+is $img->getwidth,  400, "right width";
+is $img->getheight, 200, "right height";
+
 $img = Imager::->new(data => test_controller()->req->upload('image')->slurp);
 ok $img->getwidth,  "right default width";
 ok $img->getheight, "right default height";

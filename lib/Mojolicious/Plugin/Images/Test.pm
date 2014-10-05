@@ -33,10 +33,10 @@ sub test_upload($x = 1024, $y = 800) {
   my $upload = Mojo::Upload->new(asset => $asset);
 }
 
-sub test_controller($x = 1024, $y = 800) {
+sub test_controller($x = 1024, $y = 800, $name = 'image') {
   test_image($x, $y)->write(data => \my $data, type => 'jpeg');
   my $tx = Mojo::UserAgent->new->build_tx(
-    POST => '/' => form => {image => {content => $data}});
+    POST => '/' => form => {$name => {content => $data}});
   Mojolicious::Controller->new->tx($tx);
 }
 
@@ -79,9 +79,11 @@ width and height of a created image. Defaults are (1024, 800)
 
 =method test_controller($w, $h)
 
-Builds a controller that contains upload under the name 'image' with the image
+Builds a controller that contains upload under the provided name or 'image'
+with the image
 
-  my $c = test_controller(200, 300);
+  my $c = test_controller;
+  my $c = test_controller(200, 300, 'image');
   my $data = test_controller()->req->upload('image')->slurp;
 
 =method test_upload($w, $h)

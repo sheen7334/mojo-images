@@ -47,7 +47,7 @@ ok !eval { $origin->upload($id, $upload) }, "bad image";
 ok !$origin->exists($id), "not exists yet";
 ok !$origin->read($id),   "read returned false";
 
-# origin: good
+# origin: good from Mojo::Upload
 $upload = test_upload(123, 456);
 $origin->upload($id, $upload);
 ok $origin->exists($id),   "already exists";
@@ -79,6 +79,17 @@ ok $dest->exists($id), "exists after read";
 is $dest->read($id)->getwidth,  '69', "right width";
 is $dest->read($id)->getheight, '69', "right height";
 
+# origin: good from Controller by name
+$id = uniq_id;
+$origin->controller(test_controller(333, 444));
+$origin->upload($id, 'image');
+ok $origin->exists($id),   "already exists";
+isa_ok $origin->read($id), 'Imager', 'Right class';
+is $origin->url($id),      "/media/$id-origin.jpg";
+
+my $img = $origin->read($id);
+is $img->getwidth,  333, "right width";
+is $img->getheight, 444, "right height";
 done_testing;
 
 
