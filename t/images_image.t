@@ -30,8 +30,8 @@ my $origin = $c->images->origin;
 my $dest   = $c->images->dest;
 
 # without form Origin, with: Dest
-isa_ok $origin, 'Mojolicious::Plugin::Images::Image::Origin', "Right class";
-isa_ok $dest,   'Mojolicious::Plugin::Images::Image::Dest',   "Right class";
+isa_ok $origin, 'Mojolicious::Plugin::Images::Service::Origin', "Right class";
+isa_ok $dest,   'Mojolicious::Plugin::Images::Service::Dest',   "Right class";
 
 my $id   = uniq_id;
 my $path = $origin->canonpath($id);

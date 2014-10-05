@@ -1,5 +1,5 @@
-package Mojolicious::Plugin::Images::Image::Origin;
-use Mojo::Base 'Mojolicious::Plugin::Images::Image';
+package Mojolicious::Plugin::Images::Service::Origin;
+use Mojo::Base 'Mojolicious::Plugin::Images::Service';
 use 5.20.0;
 use experimental 'signatures';
 use Imager;

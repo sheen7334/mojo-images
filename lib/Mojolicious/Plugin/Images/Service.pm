@@ -1,4 +1,4 @@
-package Mojolicious::Plugin::Images::Image;
+package Mojolicious::Plugin::Images::Service;
 use Mojo::Base -base;
 use 5.20.0;
 use experimental 'signatures';
@@ -52,6 +52,7 @@ sub _trans($self, $id, $img) {
   if (ref $trans eq 'CODE') {
     $new = $trans->($img);
   }
+
 =pod
   elsif ($trans && $trans =~ /^([\w\-:]*?)\#([\w]+)$/) {
     my ($class, $sub) = ($1, $2);
@@ -62,6 +63,7 @@ sub _trans($self, $id, $img) {
     }
   }
 =cut
+
   else {
     $new = $img;
   }

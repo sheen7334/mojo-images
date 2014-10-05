@@ -4,15 +4,15 @@ use 5.20.0;
 use experimental 'signatures';
 
 use Mojo::Path;
-use Mojolicious::Plugin::Images::Image::Dest;
-use Mojolicious::Plugin::Images::Image::Origin;
+use Mojolicious::Plugin::Images::Service::Dest;
+use Mojolicious::Plugin::Images::Service::Origin;
 use Mojolicious::Plugin::Images::Util ':all';
 
 # VERSION
 
 
 sub _class($from) {
-  my $ns = "Mojolicious::Plugin::Images::Image";
+  my $ns = "Mojolicious::Plugin::Images::Service";
   return $from ? "${ns}::Dest" : "${ns}::Origin";
 }
 
