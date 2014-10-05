@@ -12,7 +12,6 @@ our %EXPORT_TAGS = (all => \@EXPORT_OK);
 sub plugin_log($app, $tmpl, @args) {
   my $msg = sprintf($tmpl, @args);
   $app->log->debug("Mojolicious::Plugin::Images $msg");
-
 }
 
 sub calc_static($dir, $url_prefix, $home) {
@@ -52,7 +51,7 @@ sub _action($c, $moniker) {
   $c->render(text => 'foo');
   my $img = $c->images->$moniker;
 
-  plugin_log($c->app, "Images $moniker: $id");
+  plugin_log($c->app, "Generating $moniker: $id");
   return $c->reply->static($img->url($id))
     if $img->exists($id) || $img->sync($id);
 
