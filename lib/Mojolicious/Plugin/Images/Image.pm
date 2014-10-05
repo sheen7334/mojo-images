@@ -27,12 +27,7 @@ sub static_path($self) {
     = Mojo::Path->new($self->url_prefix)->canonicalize->trailing_slash(0)
     ->to_route;
 
-  return io->dir($dir)->is_absolute
-    ? io->dir($dir)->absolute . ''
-    : $self->controller->app->home->rel_dir($dir)
-    if $prefix eq '/';
-
-  $dir =~ s/$prefix$// or return;
+  $dir =~ s/$prefix$// or return if ($prefix ne '/');
 
   io->dir($dir)->is_absolute
     ? io->dir($dir)->absolute . ''
