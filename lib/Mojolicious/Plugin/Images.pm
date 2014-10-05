@@ -26,6 +26,7 @@ sub register($self, $app, $options) {
     # helper
     my %opts = (_defaults(), %{$options->{$moniker}});
     $opts{suffix} //= "-$moniker";
+    $opts{namespace} //= ref $app unless $app->isa('Mojolicious::Lite');
     my $class = _class($opts{from});
 
     my $msg_attr = join(', ',
