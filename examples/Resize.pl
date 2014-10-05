@@ -4,15 +4,14 @@ use 5.20.0;
 use experimental 'signatures';
 use lib '../lib';
 
-plugin 'Mojolicious::Plugin::Images', {
+plugin 'Mojolicious::Plugin::Images',
+  {
   big   => {},
   small => {
     from      => 'big',
-    transform => sub($t) {
-      $t->image->scale(xpixels => 242, ypixels => 200, type => 'min');
-    }
+    transform => [scale => {xpixels => 242, ypixels => 200, type => 'min'}]
   }
-};
+  };
 
 post '/' => sub($c) {
   my $id = time + int(rand() * 100000);

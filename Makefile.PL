@@ -20,9 +20,9 @@ my %WriteMakefileArgs = (
   "LICENSE" => "perl",
   "NAME" => "Mojolicious::Plugin::Images",
   "PREREQ_PM" => {
-    "IO::All" => "5.0",
-    "Imager" => "1.0",
-    "Mojolicious" => "5.0"
+    "IO::All" => 0,
+    "Imager" => 0,
+    "Mojolicious" => "5.28"
   },
   "TEST_REQUIRES" => {
     "Test::More" => "0.88"
@@ -35,9 +35,9 @@ my %WriteMakefileArgs = (
 
 
 my %FallbackPrereqs = (
-  "IO::All" => "5.0",
-  "Imager" => "1.0",
-  "Mojolicious" => "5.0",
+  "IO::All" => 0,
+  "Imager" => 0,
+  "Mojolicious" => "5.28",
   "Test::More" => "0.88"
 );
 

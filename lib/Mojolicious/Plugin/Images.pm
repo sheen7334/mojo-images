@@ -21,6 +21,8 @@ sub _defaults {
 }
 
 sub register($self, $app, $options) {
+  $options = {%{$app->config('plugin_images')}} unless keys %$options;
+
   foreach my $moniker (keys %$options) {
 
     # helper
@@ -54,12 +56,13 @@ sub register($self, $app, $options) {
 
 =head1 SYNOPSIS
 
-  ...
+  Easy manipulation with images. Documentation will be available soon
 
 =head1 DESCRIPTION
 
 Some description here.
 
-=method foo
+=method register a plugin
 
-This method does something amazing.
+Register a plugin with options. If options is omitted, plugin will try to load they from
+configaration via plugin_images key
