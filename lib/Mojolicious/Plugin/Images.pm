@@ -41,7 +41,10 @@ sub register($self, $app, $options) {
       }
     );
 
-    install_route($app, $moniker, \%opts) if defined $opts{url_prefix};
+    if (defined $opts{url_prefix}) {
+      install_route($app, $moniker, \%opts);
+      #expand_static($app, $moniker, \%opts);
+    }
   }
 }
 

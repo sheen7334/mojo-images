@@ -18,14 +18,14 @@ sub calc_static($dir, $url_prefix, $home) {
   my $prefix = Mojo::Path->new($url_prefix)->canonicalize->to_route;
   $prefix = Mojo::Path->new($prefix)->leading_slash(0)->trailing_slash(0);
 
-  $dir =~ s/$prefix$// or return ;
+  $dir =~ s/$prefix$// or return;
 
   io->dir($dir)->canonpath;
 }
 
-sub expand_static($app, $img) {
+sub expand_static($dir, $url_prefix, $app) {
+  my $static_path = calc_static($dir, $url_prefix, $app->home) or return;
   my $paths = $app->static->paths;
-  my $static_path = $img->static_path or return;
   push @$paths, $static_path unless grep { $_ eq $static_path } @$paths;
 }
 
