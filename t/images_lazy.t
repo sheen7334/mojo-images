@@ -21,7 +21,7 @@ my $options = {
 
 my $t   = Test::Mojo->new;
 my $app = app();
-push @{$app->static->paths}, "$tmpdir/dest";
+#push @{$app->static->paths}, "$tmpdir/dest";
 
 $app->plugin('Images', $options);
 my $c      = $app->build_controller;
