@@ -16,7 +16,7 @@ plugin 'Mojolicious::Plugin::Images', {
 
 post '/' => sub($c) {
   my $id = time + int(rand() * 100000);
-  $c->images->big->upload($id, $c->req->upload('image'));
+  $c->images->big->upload($id, 'image');
   $c->redirect_to("/$id.html");
 };
 
