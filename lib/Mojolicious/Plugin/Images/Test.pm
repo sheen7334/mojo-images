@@ -8,9 +8,11 @@ use Imager;
 use Mojo::Asset::Memory;
 use Mojo::Upload;
 use Mojo::Util 'steady_time';
+use Mojo::UserAgent;
+use Mojolicious::Controller;
 
 
-our @EXPORT_OK = (qw(test_upload test_image uniq_id));
+our @EXPORT_OK = (qw(test_upload test_image test_controller uniq_id));
 our %EXPORT_TAGS = (all => \@EXPORT_OK);
 
 sub test_image($x = 1024, $y = 800) {
@@ -29,6 +31,13 @@ sub test_upload($x = 1024, $y = 800) {
   test_image($x, $y)->write(data => \my $data, type => 'jpeg');
   my $asset = Mojo::Asset::Memory->new->add_chunk($data);
   my $upload = Mojo::Upload->new(asset => $asset);
+}
+
+sub test_controller($x = 1024, $y = 800) {
+  test_image($x, $y)->write(data => \my $data, type => 'jpeg');
+  my $tx = Mojo::UserAgent->new->build_tx(
+    POST => '/' => form => {image => {content => $data}});
+  Mojolicious::Controller->new->tx($tx);
 }
 
 sub uniq_id {
@@ -67,6 +76,13 @@ Returns uniq id
 
 Returns an L<Imager> object. If arguments were provided, they will be used as
 width and height of a created image. Defaults are (1024, 800)
+
+=method test_controller($w, $h)
+
+Builds a controller that contains upload under the name 'image' with the image
+
+  my $c = test_controller(200, 300);
+  my $data = test_controller()->req->upload('image')->slurp;
 
 =method test_upload($w, $h)
 
