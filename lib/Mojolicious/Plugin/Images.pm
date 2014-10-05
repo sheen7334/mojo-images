@@ -6,34 +6,10 @@ use experimental 'signatures';
 use Mojo::Path;
 use Mojolicious::Plugin::Images::Image::Dest;
 use Mojolicious::Plugin::Images::Image::Origin;
+use Mojolicious::Plugin::Images::Util ':all';
 
 # VERSION
 
-sub _action($c, $moniker) {
-  my $id = $c->stash('images_id');
-  $c->render(text => 'foo');
-  my $img = $c->images->$moniker;
-
-  $c->app->log->debug("Images $moniker: $id");
-  return $c->reply->static($img->url($id))
-    if $img->exists($id) || $img->sync($id);
-
-  return $c->reply->not_found;
-}
-
-# install route /$prefix/(*key)-$suffix.$ext
-sub _route($app, $moniker, $opts) {
-
-  my $placeholder = '(*images_id)';
-  my $end = $opts->{suffix} // '';
-  $end .= ".${\$opts->{ext}}" if $opts->{ext};
-  my $path = Mojo::Path->new($opts->{url_prefix})->leading_slash(1)
-    ->trailing_slash(1)->merge("${placeholder}${end}");
-
-  $app->log->debug("Installing route GET $path for Images '$moniker'");
-  $app->routes->get("$path")->to(cb => sub { _action(shift, $moniker) });
-
-}
 
 sub _class($from) {
   my $ns = "Mojolicious::Plugin::Images::Image";
@@ -65,7 +41,7 @@ sub register($self, $app, $options) {
       }
     );
 
-    _route($app, $moniker, \%opts) if defined $opts{url_prefix};
+    install_route($app, $moniker, \%opts) if defined $opts{url_prefix};
   }
 }
 
