@@ -19,6 +19,15 @@ has check_id => sub {
     }
 };
 
+sub static_path($self) {
+  my $prefix
+    = Mojo::Path->new($self->url_prefix)->canonicalize->trailing_slash(0)
+    ->to_route;
+  my $dir = io->dir($self->dir)->canonpath;
+  $dir =~ s/$prefix$// or return;
+  io->dir($dir)->absolute;
+}
+
 sub url($self, $id) {
   my $fname
     = $self->check_id->($id)
