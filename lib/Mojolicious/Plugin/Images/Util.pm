@@ -17,7 +17,7 @@ sub check_dir($dir, $app) {
   return $dir if $INSECURE_DIRS;
   my $msg
     = "insecure dir ${\ ( $dir // 'undef' ) }, set IMAGES_ALLOW_INSECURE_DIRS env to allow it";
-  die $msg if !$dir || Mojo::Path->new($app->home)->contains($dir);
+  die $msg if !$dir || Mojo::Path->new($app->home)->contains("$dir");
   return $dir;
 }
 
