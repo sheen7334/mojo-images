@@ -26,7 +26,6 @@ $c   = $app->build_controller;
 $foo = $c->images->foo;
 is $foo->namespace, 'MyApp';
 
-
 @MyApp::Trans::ISA = ('Mojolicious::Plugin::Images::Transformer');
 @Outer::Trans::ISA = ('Mojolicious::Plugin::Images::Transformer');
 
@@ -66,7 +65,6 @@ is $c->images->img1000->read($id)->getwidth,    1000, "right width";
 is $c->images->img99->read($id)->getwidth,      99,   "right width";
 is $c->images->img200x10->read($id)->getwidth,  200,  "right width";
 is $c->images->img200x10->read($id)->getheight, 10,   "right height";
-
 
 done_testing;
 

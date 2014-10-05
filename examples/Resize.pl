@@ -8,8 +8,8 @@ plugin 'Mojolicious::Plugin::Images', {
   big   => {},
   small => {
     from      => 'big',
-    transform => sub($img) {
-      $img->scale(xpixels => 242, ypixels => 200, type => 'min');
+    transform => sub($t) {
+      $t->image->scale(xpixels => 242, ypixels => 200, type => 'min');
     }
   }
 };
