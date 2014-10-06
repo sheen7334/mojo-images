@@ -29,13 +29,14 @@ Production ready release and some docs will be available ASAP (or maybe wan't). 
     $c->images->big->upload('ID', 'image_param');
 
 That's all. This code automatically installs lazy (on demand) resizing for images and
-install valid static paths to serve images as static content. Check debug log to see
-what paths to provide for nginx, for example.
+installs valid static paths to serve images as static content. Check debug log to see
+what path to provide for nginx, for example.
 
 # DESCRIPTION
 
-This nifty and amazing plugin helps to orginize images in your application. It provides very simple but poweful features.
-Can be used in small application with no coding (to generate thumbnails and so on) and
+This nifty and amazing plugin helps to orginize images in your application. It provides very simple but poweful features
+even without coding.
+Can be used in small application to generate thumbnails and so on and
 in poweful services which works a lot with images as well.
 
 Plugin supports automaticaly calculation of static paths, on demand resizing (lazy), image protections and so on.

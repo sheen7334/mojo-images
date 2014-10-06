@@ -1,4 +1,4 @@
-use Mojo::Base -base;
+use Mojo::Base -strict;
 use 5.20.0;
 use experimental 'signatures';
 
