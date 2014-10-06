@@ -38,7 +38,6 @@ is $second->canonpath('привет'), 'public/images/привет',
 
 # configuration
 
-use Data::Dumper;
 $app = Mojolicious->new;
 $app->config(
   plugin_images => {foo => {transform => [scale => {xpixels => 200}]}});

@@ -1,19 +1,10 @@
-# NAME [![Build Status](https://travis-ci.org/alexbyk/mojo-images.svg?branch=master)](https://travis-ci.org/alexbyk/mojo-images)
+# NAME
 
 Mojolicious::Plugin::Images - easy and powerful image manipulation for Mojolicious
 
 # VERSION
 
 version 0.002
-
-# Attention
-
-This is the test release, it isn't available on CPAN yet. Documentation is "на отъебись dzil-а" only.
-You can check out an [example](https://github.com/alexbyk/mojo-images/blob/master/examples/Resize.pl) - it is cool. 
-
-Advices are welcome.
-
-Production ready release and some docs will be available ASAP (or maybe wan't). Add to bookmarks - don't miss it.
 
 # SYNOPSIS
 
@@ -23,20 +14,24 @@ Production ready release and some docs will be available ASAP (or maybe wan't). 
         from      => 'big',
         transform => [scale => {xpixels => 242, ypixels => 200, type => 'min'}]
       },
+    #  thumb  => {from => 'small', transform => 'myclass#action'},
+    #  thumb2 => {
+    #    from      => 'small',
+    #    transform => sub($t) { $t->image->scale(xpixels => 200) }
+    #  },
     };
 
     # then in controller save an image ridiculously simple
-    $c->images->big->upload('ID', 'image_param');
+    $c->images->big->upload('ID', 'image_or_other_name');
 
 That's all. This code automatically installs lazy (on demand) resizing for images and
-installs valid static paths to serve images as static content. Check debug log to see
-what path to provide for nginx, for example.
+install valid static paths to serve images as static content. Check debug log to see
+what paths to provide for nginx, for example.
 
 # DESCRIPTION
 
-This nifty and amazing plugin helps to orginize images in your application. It provides very simple but poweful features
-even without coding.
-Can be used in small application to generate thumbnails and so on and
+This nifty and amazing plugin helps to orginize images in your application. It provides very simple but poweful features.
+Can be used in small application with no coding (to generate thumbnails and so on) and
 in poweful services which works a lot with images as well.
 
 Plugin supports automaticaly calculation of static paths, on demand resizing (lazy), image protections and so on.
