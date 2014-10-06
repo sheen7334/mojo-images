@@ -92,3 +92,69 @@ sub write($self, $id, $img) {
 
 1;
 
+=head1 SYNOPSIS
+
+  my $service = $c->helper->service_by_moniker;
+
+=head1 DESCRIPTION
+
+Base class for service objects (helpers).
+
+=method write ($self, $id, $img) 
+
+writes an image
+
+=method url ($self, $id) 
+
+returns url of an image
+
+=method canonpath ($self, $id) 
+
+returns a full normalized fs path of an image
+
+
+=method exists ($self, $id)
+
+returns true if an image with given id exists
+
+=method read ($self, $id)
+
+reads an image and returns an Imager object
+
+=attr namespace
+
+=attr url_prefix
+Url prefix. Used to atomatically calculate static path. i</images> by defaults
+
+=attr ext
+
+=attr dir
+Directory of images, i<public/images> by default
+
+=attr suffix
+suffix, a moniker by default
+
+=attr write_options
+write options for Imager
+
+=attr read_options
+read options for Imager
+
+=attr transform
+Transformation
+
+  # transform to clousure
+  sub { my $t = shift; return $t->image->scale(xpixels => 100) };
+
+  # transform to {namespace}::Trans::action
+  trans#action
+  
+  # perfom a couple of transformations
+  [scale => {xpixels => 100}, crop => {width => 100}];
+
+For the subroutines an object L<Mojolicious::Plugin::Images::Transformer> will be passed.
+Must return an Imager object
+
+=attr controller
+
+Documentation will be available soon

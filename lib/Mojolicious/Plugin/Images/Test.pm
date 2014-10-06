@@ -63,13 +63,13 @@ sub uniq_id {
 
 Helpful functions for testing purposes
 
-=method uniq_id
+=func uniq_id
 
   my $id = uniq_id;
 
 Returns uniq id
 
-=method test_image($w, $h)
+=func test_image ($w, $h)
 
   my $img = test_image;
   $img = test_image(1024, 800);
@@ -77,7 +77,7 @@ Returns uniq id
 Returns an L<Imager> object. If arguments were provided, they will be used as
 width and height of a created image. Defaults are (1024, 800)
 
-=method test_controller($w, $h)
+=func test_controller ($w, $h)
 
 Builds a controller that contains upload under the provided name or 'image'
 with the image
@@ -86,7 +86,7 @@ with the image
   my $c = test_controller(200, 300, 'image');
   my $data = test_controller()->req->upload('image')->slurp;
 
-=method test_upload($w, $h)
+=func test_upload ($w, $h)
 
   my $upload = test_upload;
   $upload = test_upload(1024, 800);

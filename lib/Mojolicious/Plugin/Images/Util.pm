@@ -79,3 +79,36 @@ sub _action($c, $moniker) {
 }
 
 1;
+
+
+=head1 SYNOPSIS
+   
+  use Mojolicious::Plugin::Images::Util ':all';
+
+=head1 DESCRIPTION
+
+Some convinient method for plugin
+
+=func expand_static ($dir, $url_prefix, $app)
+
+Expands application's static->paths without duplicates
+
+=func calc_static ($dir, $url_prefix, $home) 
+
+Calculate which path should be added to the static paths
+
+=func install_route ($app, $moniker, $opts)
+
+Install route for serving images.
+
+=func  check_id ($id)
+
+Security checks of id. By default only i</^[\ \-\w\/]+$/> allowed
+
+=func check_dir ($dir, $app)
+
+Check directory. Allow directory outside of application parent tree (security for dummies)
+
+=func plugin_log ($app, $tmpl, @args)
+
+Prints debug log using sprintf

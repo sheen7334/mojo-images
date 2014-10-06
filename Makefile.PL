@@ -10,8 +10,8 @@ use ExtUtils::MakeMaker ;
 
 
 my %WriteMakefileArgs = (
-  "ABSTRACT" => "brand new module Mojolicious::Plugin::Images",
-  "AUTHOR" => "alexbyk <alex\@alexbyk.com>",
+  "ABSTRACT" => "easy and powerful image manipulation for Mojolicious",
+  "AUTHOR" => "alexbyk <alexbyk\@cpan.org>",
   "CONFIGURE_REQUIRES" => {
     "ExtUtils::MakeMaker" => 0
   },

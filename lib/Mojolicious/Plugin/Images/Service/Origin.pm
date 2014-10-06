@@ -11,3 +11,28 @@ sub upload ($self, $id, $upload) {
 }
 
 1;
+
+=head1 SYNOPSIS
+
+  my $origin = $c->images->origin;
+  
+=head1 DESCRIPTION
+
+A service for images that are origins of others and can be written from uploads. 
+Inherits all objects from L<Mojolicious::Plugin::Images::Service> and implements the following new ones
+
+
+=method upload ($self, $id, $upload_or_name) 
+
+Save image from L<Mojo::Upload> object or finds an upload in the controller
+
+  $img = $origin->upload('image');
+  $img = $origin->upload($controller->req->upload('image'));
+
+=method read ($self, $id) 
+
+Reads an object and tries to syncronize it if not exists yet
+
+=attr from
+
+A moniker to the parent object
