@@ -53,6 +53,8 @@ sub register($self, $app, $options) {
 
 # ABSTRACT: easy and powerful image manipulation for Mojolicious
 
+=for HTML <a href="https://travis-ci.org/alexbyk/mojo-images"><img src="https://travis-ci.org/alexbyk/mojo-images.svg?branch=master"></a>
+
 =head1 SYNOPSIS
 
   plugin 'Mojolicious::Plugin::Images', {
