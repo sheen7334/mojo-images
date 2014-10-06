@@ -13,6 +13,8 @@ You can check out an [example](https://github.com/alexbyk/mojo-images/blob/maste
 
 Advices are welcome.
 
+Production ready release and some docs will be available ASAP (or maybe wan't). Add to bookmarks - don't miss it.
+
 # SYNOPSIS
 
     plugin 'Mojolicious::Plugin::Images', {
