@@ -97,4 +97,4 @@ By the way. I liked signatures feature so much, so I decided to made 5.20.0 as a
 =method register a plugin
 
 Registers a plugin with options. If options is omitted, plugin will try to load them from
-configaration via b<plugin_images> key
+configuration via b<plugin_images> key
