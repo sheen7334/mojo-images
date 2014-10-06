@@ -4,7 +4,7 @@ Mojolicious::Plugin::Images - easy and powerful image manipulation for Mojolicio
 
 # VERSION
 
-version 0.002
+version 0.003
 
 # SYNOPSIS
 
