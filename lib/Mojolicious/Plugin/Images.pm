@@ -20,7 +20,9 @@ sub _defaults {
 }
 
 sub register($self, $app, $options) {
-  $options = {%{$app->config('plugin_images')}} unless keys %$options;
+  $options = {%{$app->config('plugin_images') || {}}} unless keys %$options;
+  plugin_log($app, "Plugin is loaded but neither options no config provided")
+    unless keys %$options;
 
   foreach my $moniker (keys %$options) {
 

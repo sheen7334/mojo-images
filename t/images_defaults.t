@@ -39,7 +39,6 @@ is $second->canonpath('привет'), 'public/images/привет',
   'right url';
 
 # configuration
-
 $app = Mojolicious->new;
 $app->config(
   plugin_images => {foo => {transform => [scale => {xpixels => 200}]}});
@@ -47,4 +46,10 @@ $app->plugin('Images');
 $c = $app->build_controller;
 
 is $c->images->foo->dir, 'public/images', "right dir";
+
+# no config no options
+$app = Mojolicious->new;
+$app->config();
+$app->plugin('Images');
+ok $c = $app->build_controller;
 done_testing;
